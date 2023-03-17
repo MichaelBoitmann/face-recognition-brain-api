@@ -1,0 +1,22 @@
+{
+  "name": "face-recognition-brain-api",
+  "version": "1.0.0",
+  "description": "server",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichaelBoitmann/face-recognition-brain-api.git"
+  },
+  "keywords": [
+    "server"
+  ],
+  "author": "Michael Boitmann",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MichaelBoitmann/face-recognition-brain-api/issues"
+  },
+  "homepage": "https://github.com/MichaelBoitmann/face-recognition-brain-api#readme"
+}
