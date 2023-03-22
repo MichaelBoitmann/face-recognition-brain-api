@@ -38,6 +38,7 @@ app.use(cors());
 
 app.get('/', (req, res) => {
     res.send(userDatabase.users);
+    console.log(users);
 })
 
 app.post('/signin', (req, res) => {
