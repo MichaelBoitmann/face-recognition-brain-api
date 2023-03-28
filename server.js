@@ -4,46 +4,51 @@ const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const knex = require('knex');
 
-knex({
-    client: 'mysql',
+
+const userDB = knex({
+    client: 'pg',
     connection: {
       host : '127.0.0.1',
-      port : 3306,
-      user : 'your_database_user',
-      password : 'your_database_password',
-      database : 'myapp_test'
+      port : '5432',
+      user : 'postgres',
+      password : 'boitmann',
+      database : 'smart-brain'
     }
-  });
+});
+
+// userDB.select('*').from('users').then(data => {
+//     console.log(data);
+// });
 
 const app = express();
 
-const userDatabase = {
-    users: [
-        {
-            id: '134', 
-            name: 'Michael',
-            email: 'michael@gmail.com',
-            password: 'lenovo',
-            entries: 0,
-            joined: new Date()
-        },
-        {
-            id: '135',
-            name: 'Jocelyn',
-            email: 'joyce@gmail.com',
-            password: 'iphone13',
-            entries: 0,
-            joined: new Date()            
-        }
-    ],
-    login: [
-        {
-            id: '987',
-            hash: '',
-            email: 'michael@gmail.com'
-        }
-    ]
-}
+// const userDatabase = {
+//     users: [
+//         {
+//             id: '134', 
+//             name: 'Michael',
+//             email: 'michael@gmail.com',
+//             password: 'lenovo',
+//             entries: 0,
+//             joined: new Date()
+//         },
+//         {
+//             id: '135',
+//             name: 'Jocelyn',
+//             email: 'joyce@gmail.com',
+//             password: 'iphone13',
+//             entries: 0,
+//             joined: new Date()            
+//         }
+//     ],
+//     login: [
+//         {
+//             id: '987',
+//             hash: '',
+//             email: 'michael@gmail.com'
+//         }
+//     ]
+// }
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -64,29 +69,26 @@ app.post('/signin', (req, res) => {
 
 app.post('/register', (req, res) => {
     const { email, name, password } = req.body;
-    bcrypt.hash(password, null, null, function(err, hash) {
-        console.log(hash);
-    })
-    userDatabase.users.push({
-        id: '136',
+    userDB('users')
+    .returning('*')
+    .insert({
         name: name,
         email: email,
-        password: password,
-        entries: 0,
         joined: new Date() 
     })
-    res.json(userDatabase.users[userDatabase.users.length-1]);
+    .then(users => {
+        res.json(users[0]);
+    })
+    .catch(err => res.status(400).json('unable to register...'))
 })
 
 app.get('/profile/:id', (req,res) => {
     const { id } = req.params;
     let found = false;
-    userDatabase.users.forEach(user => {
-        if (user.id === id) {
-            found = true;
-            return res.json(user);
-        } 
+    userDB.select('*').from('users').then(user => {
+        console.log(user);
     })
+
     if (!found) {
         res.status(400).json('not found');
     }
@@ -118,12 +120,3 @@ app.post('/image', (req, res) => {
 app.listen(3001, () => {
     console.log('app.listen line is running on port 3001');
 })
-
-/*
-/ --> res = this is working
-/signin --> POST = successful/fail
-/register --> POST = user
-/profile/:userId --> GET = user
-/increase the counter when submitting a photos
-/image --> PUT --> user
-*/
