@@ -8,7 +8,7 @@ const knex = require('knex');
 const userDB = knex({
     client: 'pg',
     connection: {
-      host : '127.0.0.1',
+      host : 'localhost',
       port : '5432',
       user : 'postgres',
       password : 'boitmann',
@@ -16,54 +16,35 @@ const userDB = knex({
     }
 });
 
-// userDB.select('*').from('users').then(data => {
-//     console.log(data);
-// });
-
 const app = express();
-
-// const userDatabase = {
-//     users: [
-//         {
-//             id: '134', 
-//             name: 'Michael',
-//             email: 'michael@gmail.com',
-//             password: 'lenovo',
-//             entries: 0,
-//             joined: new Date()
-//         },
-//         {
-//             id: '135',
-//             name: 'Jocelyn',
-//             email: 'joyce@gmail.com',
-//             password: 'iphone13',
-//             entries: 0,
-//             joined: new Date()            
-//         }
-//     ],
-//     login: [
-//         {
-//             id: '987',
-//             hash: '',
-//             email: 'michael@gmail.com'
-//         }
-//     ]
-// }
 
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-    res.send(userDatabase.users);
-    console.log(users);
-})
+// app.get('/', (req, res) => {
+//     res.send(userDatabase.users);
+//     console.log(users);
+// })
 
 app.post('/signin', (req, res) => {
-  userDB.select('email', 'hash').from(login)
-  .where({'email', '=', req.body.email})
-  .then(data => {
-    console.log(data)
-  })
+    userDB.select('email', 'hash').from('login')
+        .where('email', '=', req.body.email)
+        .then(data => {
+            console.log(data);
+            const isValid = bcrypt.compareSync(req.body.password, data[0].hash);
+            if (isValid) {
+                return userDB.select('*').from('users')
+                    .where('email', '=', req.body.email)
+                    .then(user => {
+                        console.log(user);
+                        res.json(user[0])
+                    })
+                    .catch(err => res.status(400).jason('unable to  get user'))
+            } else {
+                res.status(400).json('1st wrong credentials')
+            }
+        })
+        .catch(err => res.status(400).json('2nd wrong credentials'))
 })
 
 app.post('/register', (req, res) => {
@@ -80,8 +61,8 @@ app.post('/register', (req, res) => {
             return trx('users')
             .returning('*')
             .insert({
+                email: loginEmail[0].email,
                 name: name,
-                email: loginEmail,
                 joined: new Date() 
             })
             .then(user => {
@@ -113,11 +94,11 @@ app.put('/image', (req, res) => {
     .increment('entries', 1)
     .returning('entries')
     .then(entries => {
-        res.json(entries[0])
+        res.json(entries[0].entries)
     })
     .catch(err => res.status(400).json('unable to get entries'))
 })
 
-app.listen(3001, () => {
-    console.log('app.listen line is running on port 3001');
+app.listen(3000, () => {
+    console.log('app.listen line is running on port 3000');
 })
