@@ -7,7 +7,6 @@ const knex = require('knex');
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
 
-
 const userDB = knex({
   client: 'pg',
   connection: {
@@ -22,36 +21,14 @@ const userDB = knex({
 const app = express();
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-
-app.post('/signin', register.handleSignin)
-
-app.post('/register', register.handleRegister)
-
-app.get('/profile/:id', (req,res) => {
-  const { id } = req.params;
-  userDB.select('*').from('users').where({id})
-    .then(user => {
-      if (user.length) {
-        res.json(user[0])
-      }else {
-        res.status(400).json('not found')
-      }
-    })
-    .catch(err => res.status(400).json('error getting user'))
-})
-
-app.put('/image', (req, res) => {
-  const { id } = req.body;
-  userDB('users').where('id', '=', id)
-  .increment('entries', 1)
-  .returning('entries')
-  .then(entries => {
-      res.json(entries[0].entries)
-  })
-  .catch(err => res.status(400).json('unable to get entries'))
-})
+app.get('/', (req, res) => { res.send(userDB.users) })
+app.post('/signin', (req, res) => { signin.handleSignin(userDB, bcrypt) })
+app.post('/register', (req, res) => { register.handleRegister(req, res, userDB, bcrypt) })
+app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, userDB) })
+app.put('/image', (req, res) => { image.handleImage(req, res, userDB) })
+app.post('/imageurl', (req, res) => { image.handleApiCall(req, res) })
 
 app.listen(3000, () => {
     console.log('app.listen line is running on port 3000');
