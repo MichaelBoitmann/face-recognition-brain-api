@@ -2,6 +2,18 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
+const knex = require('knex');
+
+const userDB = knex({
+  client: 'pg',
+  connection: {
+    host : 'localhost',
+    port : '5432',
+    user : 'postgres',
+    password : 'boitmann',
+    database : 'smart-brain'
+  }
+});
 
 const app = express();
 
@@ -87,7 +99,7 @@ app.get('/profile/:id', (req, res) => {
   }
 })
 
-app.post('/image', (req, res) => {
+app.put('/image', (req, res) => {
   const { id } = req.body;
   let found = false;
   database.users.forEach(user => {
