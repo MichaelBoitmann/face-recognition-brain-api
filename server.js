@@ -4,54 +4,58 @@ const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const knex = require('knex');
 
-const userDB = knex({
+const db = knex({
   client: 'pg',
   connection: {
     host : 'localhost',
     port : '5432',
     user : 'postgres',
     password : 'boitmann',
-    database : 'smart-brain'
+    database : 'smart-face-detector'
   }
+});
+
+db.select('*').from('users').then(data => {
+  console.log(data);
 });
 
 const app = express();
 
-const database = {
-  users: [
-  {
-    id: '123',
-    name: 'Michael',
-    email: 'michael@gmail.com',
-    password: 'lenovo',
-    entries: 0,
-    joince: new Date() 
-  },
-  {
-    id: '124',
-    name: 'Joyce',
-    email: 'joyce@gmail.com',
-    password: 'red',
-    entries: 0,
-    joince: new Date() 
-  },
-  {
-    id: '125',
-    name: 'Angel',
-    email: 'angel@gmail.com',
-    password: 'rotorua',
-    entries: 0,
-    joined: new Date() 
-  }
-  ],
-  login: [
-    {
-      id: '987',
-      hash: '',
-      email: 'michael@gmail.com'
-    }
-  ]
-}
+// const database = {
+//   users: [
+//   {
+//     id: '123',
+//     name: 'Michael',
+//     email: 'michael@gmail.com',
+//     password: 'lenovo',
+//     entries: 0,
+//     joince: new Date() 
+//   },
+//   {
+//     id: '124',
+//     name: 'Joyce',
+//     email: 'joyce@gmail.com',
+//     password: 'red',
+//     entries: 0,
+//     joince: new Date() 
+//   },
+//   {
+//     id: '125',
+//     name: 'Angel',
+//     email: 'angel@gmail.com',
+//     password: 'rotorua',
+//     entries: 0,
+//     joined: new Date() 
+//   }
+//   ],
+//   login: [
+//     {
+//       id: '987',
+//       hash: '',
+//       email: 'michael@gmail.com'
+//     }
+//   ]
+// }
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -71,18 +75,15 @@ app.post('/signin', (req, res) => {
 
 app.post('/register', (req, res) => {
   const { email, name, password } = req.body;
+  db('users').insert({
+    email: email,
+    name: name,
+    joined: new Date()
+  }).then(console.log)
   // bcrypt.hash(password, null, null, function(err, hash) {
   //   console.log(hash);
 
-  database.users.push({
-    id: '135',
-    name: name,
-    email: email,
-    password: password,
-    entries: 0,
-    joined: new Date() 
-  })
-  res.json(database.users[database.users.length-1]);
+  res.json(db.users[db.users.length-1]);
 })
 
 app.get('/profile/:id', (req, res) => {
