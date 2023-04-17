@@ -15,7 +15,7 @@ const db = knex({
   }
 });
 
-// Access to database built from Postgres
+// Listing the database built from Postgres; e.g. "users" the table name
 // db.select('*').from('users').then(mich => {
 //   console.log(mich);
 // });
@@ -62,29 +62,56 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.send(database.users);
+  res.send(db.users);
 })
 
 app.post('/signin', (req, res) => {
-  if (req.body.email === database.users[0].email &&
-      req.body.password === database.users[0].password) {
-    res.json(database.users[0]);
-  } else {
-    return res.status(400).json('error in signing in')
-  }
+  db.select('email', 'hash').from('login')
+    .where('email', '=', req.body.email)
+    .then(data => {
+      const isValid = bcrypt.compareSync(req.body.password, data[0].hash);
+      console.log(isValid);
+      if (isValid) {
+        return db.select('*').from('users')
+          .where('email', '=', req.body.email)
+          .then(user => {
+            console.log(user);
+            res.json(user[0])
+          })
+          .catch(err => res.status(400).json('unable to sign in the user'))
+      } else {
+        res.status(400).json('wrong credentials')
+      }
+
+    })
+    .catch(err => res.status(400).json('unable to get user'))
 })
+
 // Register for new user
 app.post('/register', (req, res) => {
   const { email, name, password } = req.body;
-  db('users')
-    .returning('*')
-    .insert({
-      email: email,
-      name: name,
-      joined: new Date()
-    })
-    .then(user => {
-      res.json(user[0]);
+  const hash = bcrypt.hashSync(password);
+    db.transaction(trx => {
+      trx.insert({
+        hash: hash,
+        email: email
+      })
+      .into('login')
+      .returning('email')
+      .then(loginEmail => {
+        return trx('users')
+          .returning('*')
+          .insert({
+            email: loginEmail[0].email,
+            name: name,
+            joined: new Date()
+          })
+          .then(user => {
+            res.json(user[0]);
+          })
+      })
+      .then(trx.commit) // Commit to add the new user info
+      .catch(trx.rollback) // If anything fails, will roll back
     })
     .catch(err => res.status(400).json('unable to register'))
 })
