@@ -5,6 +5,11 @@ const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const knex = require('knex');
 
+const register = requires('./controllers/register');
+const signin = require('./controllers/signin');
+const profile = require('./controllers/profile');
+const image = require('./controllers/image');
+
 // Connecting to Postgres database using PGAdmin4
 const db = knex({
   client: 'pg',
