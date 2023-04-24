@@ -12,6 +12,7 @@ const image = require('./controllers/image');
 
 // Connecting to Postgres database using PGAdmin4
 const db = knex({
+  // Connection to postgres database
   client: 'pg',
   connection: {
     host : 'localhost',

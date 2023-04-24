@@ -1,7 +1,7 @@
 const handleRegister = (req, res, db, bcrypt) => {
   const { email, name, password } = req.body;
   if (!email || !name || !password) {
-    return res.status(400).json('incorrect register form submission');
+    return res.status(400).json('incorrect credentials');
   }
   const hash = bcrypt.hashSync(password);
     db.transaction(trx => {
@@ -15,7 +15,7 @@ const handleRegister = (req, res, db, bcrypt) => {
         return trx('users')
           .returning('*')
           .insert({
-            email: loginEmail[0].email,
+            email: loginEmail[0].email, // Knex.js version 1.0.0 or higher
             name: name,
             joined: new Date() 
           })
