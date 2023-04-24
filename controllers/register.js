@@ -1,10 +1,10 @@
-const handleRegister = (req, res, userDB, bcrypt) => {
+const handleRegister = (req, res, db, bcrypt) => {
   const { email, name, password } = req.body;
   if (!email || !name || !password) {
     return res.status(400).json('incorrect register form submission');
   }
   const hash = bcrypt.hashSync(password);
-    userDB.transaction(trx => {
+    db.transaction(trx => {
       trx.insert({
         hash: hash,
         email: email
@@ -15,7 +15,7 @@ const handleRegister = (req, res, userDB, bcrypt) => {
         return trx('users')
           .returning('*')
           .insert({
-            email: loginEmail[0],
+            email: loginEmail[0].email,
             name: name,
             joined: new Date() 
           })
