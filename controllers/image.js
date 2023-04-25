@@ -2,7 +2,7 @@ const Clarifai = require('clarifai');
 
 //Add your own API key here from Clarifai. 
 const app = new Clarifai.App({
- apiKey: 'YOUR API KEY HERE' 
+ apiKey: 'e7bf11813a9f4b4da81c7fab358e6db9' 
 });
 
 const handleApiCall = (req, res) => 
@@ -15,7 +15,7 @@ const handleApiCall = (req, res) =>
 
 const handleImage = (req, res) => {
     const { id } = req.body;
-    userDB('users').where('id', '=', id)
+    db('users').where('id', '=', id)
     .increment('entries', 1)
     .returning('entries')
     .then(entries => {
