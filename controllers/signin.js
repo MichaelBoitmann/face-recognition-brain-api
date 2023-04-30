@@ -3,7 +3,6 @@ const handleSignin = (db, bcrypt) => (req, res) => {
   if (!email || !password) {
     return res.status(400).json('incorrect Login / Password');
   }
-
   db.select('email', 'hash').from('login')
     .where('email', '=', email)
     .then(data => {
@@ -25,4 +24,3 @@ const handleSignin = (db, bcrypt) => (req, res) => {
 module.exports = {
   handleSignin: handleSignin
 }
-  

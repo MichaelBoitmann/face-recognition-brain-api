@@ -74,6 +74,7 @@ app.use(express.json());
 app.get('/', (req, res) => { res.send(db.users) })
 
 // Sign in for registered user
+// app.post('/signin', (req, res) => { signin.handleSignin(req, res, db, bcrypt) })
 app.post('/signin', signin.handleSignin(db, bcrypt))
 
 // Register for new user
