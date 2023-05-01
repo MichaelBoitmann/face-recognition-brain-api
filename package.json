@@ -2,7 +2,7 @@
   "name": "face-recognition-brain-api",
   "version": "1.0.0",
   "description": "server",
-  "main": "script.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "start:dev": "nodemon server.js",
