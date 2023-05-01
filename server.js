@@ -89,6 +89,6 @@ app.put('/image', (req, res) => { image.handleImage(req, res, db) })
 // Api Call for image
 app.post('/imageurl', (req, res) => { image.handleApiCall(req, res) })
 
-app.listen(3000, () => {
-  console.log('app is running on post 3000');
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`app is running on post ${process.env.PORT}`);
 })
