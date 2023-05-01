@@ -83,8 +83,10 @@ app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcry
 // User profile with number of image detection request
 app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db) })
 
+// Handle image processing
 app.put('/image', (req, res) => { image.handleImage(req, res, db) })
 
+// Api Call for image
 app.post('/imageurl', (req, res) => { image.handleApiCall(req, res) })
 
 app.listen(3000, () => {
