@@ -17,9 +17,9 @@ const db = knex({
   connection: {
     host : 'postgres://sfd_db_user:XAcsLhdIg7Z6RgXFlIQTyalXQFTQlwyE@dpg-ch7miv02qv26p1dt7jlg-a/sfd_db',
     port : '5432',
-    user : 'postgres',
-    password : 'boitmann',
-    database : 'smart-face-detector'
+    user : 'sfd_db_user',
+    password : 'XAcsLhdIg7Z6RgXFlIQTyalXQFTQlwyE',
+    database : 'sfd_db'
   }
 });
 
