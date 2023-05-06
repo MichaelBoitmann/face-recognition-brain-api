@@ -18,10 +18,23 @@ const db = knex({
     host : 'postgres://sfd_db_user:XAcsLhdIg7Z6RgXFlIQTyalXQFTQlwyE@dpg-ch7miv02qv26p1dt7jlg-a/sfd_db',
     port : '5432',
     user : 'sfd_db_user',
-    password : 'boitmann',
-    database : 'smart-face-detector'
+    password : 'XAcsLhdIg7Z6RgXFlIQTyalXQFTQlwyE',
+    database : 'sfd_db'
   }
 });
+
+// Local host connection
+// const db = knex({
+//   // Connection to postgres database
+//   client: 'pg',
+//   connection: {
+//     host : 'localhost',
+//     port : '5432',
+//     user : 'postgres',
+//     password : 'boitmann',
+//     database : 'smart-face-detector'
+//   }
+// });
 
 // Listing the database built from Postgres; e.g. "users" the table name
 // db.select('*').from('users').then(mich => {
