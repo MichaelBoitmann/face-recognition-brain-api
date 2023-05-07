@@ -15,11 +15,13 @@ const db = knex({
   // Connection to postgres database
   client: 'pg',
   connection: {
-    host : 'dpg-ch7miv02qv26p1dt7jlg-a',
+    connectionString : process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false },
+    host : process.env.DATABASE_HOST,
     port : '5432',
-    user : 'sfd_db_user',
-    password : 'XAcsLhdIg7Z6RgXFlIQTyalXQFTQlwyE',
-    database : 'sfd_db'
+    user : process.env.DATABASE_USER,
+    password : process.env.DATABASE_PW,
+    database : process.env.DATABASE_DB
   }
 });
 
