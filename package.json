@@ -34,5 +34,8 @@
   "devDependencies": {
     "@types/bcrypt-nodejs": "^0.0.31",
     "nodemon": "^2.0.21"
+  },
+  "engines": {
+    "node": ">=18.16"
   }
 }
