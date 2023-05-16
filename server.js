@@ -18,7 +18,7 @@ const db = knex({
     connectionString : process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
     host : process.env.DATABASE_HOST,
-    port : '5432',
+    port : 5432,
     user : process.env.DATABASE_USER,
     password : process.env.DATABASE_PW,
     database : process.env.DATABASE_DB
@@ -90,7 +90,7 @@ app.get('/', (req, res) => { res.send(db.users) })
 
 // Sign in for registered user
 // app.post('/signin', (req, res) => { signin.handleSignin(req, res, db, bcrypt) })
-app.post('/signin', signin.handleSignin(db, bcrypt))
+app.post('/signin', signin.handleSignin(req, res, db, bcrypt))
 
 // Register for new user
 app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
