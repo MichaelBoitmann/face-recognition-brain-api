@@ -1,7 +1,5 @@
-// require('dotenv').config();
-
 const express = require('express');
-// Latest version of ExpressJS that comes with Body-Parser!
+
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
@@ -13,7 +11,6 @@ const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 
-// config();
 
 // Connecting to Postgres database using PGAdmin4
 const db = knex({
@@ -21,7 +18,7 @@ const db = knex({
   client: 'pg',
   connection: {
     connectionString : process.env.DATABASE_URL,
-    // ssl: { rejectUnauthorized: true },
+    ssl: { rejectUnauthorized: false },
     host : process.env.DATABASE_HOST,
     port : 5432,
     user : process.env.DATABASE_USER,
@@ -29,7 +26,6 @@ const db = knex({
     database : process.env.DATABASE_DB
   }
 });
-
 
 // Local host connection
 // const db = knex({
@@ -111,5 +107,5 @@ app.put('/image', (req, res) => { image.handleImage(req, res, db) })
 app.post('/imageurl', (req, res) => { image.handleApiCall(req, res) })
 
 app.listen(process.env.PORT || 3000, () => {
-  console.log(`app is running on post ${process.env.PORT}`);
+  console.log(`app is running on PORT ${process.env.PORT}`);
 })
