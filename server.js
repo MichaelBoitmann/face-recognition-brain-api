@@ -1,17 +1,17 @@
 require('dotenv').config();
 
-import express, { json } from 'express';
+const express = require('express');
 // Latest version of ExpressJS that comes with Body-Parser!
-import bodyParser from 'body-parser';
-import bcrypt from 'bcrypt-nodejs';
-import cors from 'cors';
-import knex from 'knex';
-import { config } from 'dotenv';
+const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt-nodejs');
+const cors = require('cors');
+const knex = require('knex');
+const { config } = require('dotenv');
 
-import { handleRegister } from './controllers/register';
-import { handleSignin } from './controllers/signin';
-import { handleProfileGet } from './controllers/profile';
-import { handleImage, handleApiCall } from './controllers/image';
+const register = require('./controllers/register');
+const signin = require('./controllers/signin');
+const profile = require('./controllers/profile');
+const image = require('./controllers/image');
 
 config();
 
@@ -88,26 +88,26 @@ const app = express();
 // }
 
 app.use(cors());
-app.use(json());
+app.use(express.json());
 
 // Root page
 app.get('/', (req, res) => { res.send(db.users) })
 
 // Sign in for registered user
-app.post('/signin', (req, res) => { handleSignin(req, res, db, bcrypt) })
+app.post('/signin', (req, res) => { signin.handleSignin(req, res, db, bcrypt) })
 // app.post('/signin', signin.handleSignin(req, res, db, bcrypt))
 
 // Register for new user
-app.post('/register', (req, res) => { handleRegister(req, res, db, bcrypt) })
+app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
 
 // User profile with number of image detection request
-app.get('/profile/:id', (req, res) => { handleProfileGet(req, res, db) })
+app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db) })
 
 // Handle image processing
-app.put('/image', (req, res) => { handleImage(req, res, db) })
+app.put('/image', (req, res) => { image.handleImage(req, res, db) })
 
 // Api Call for image
-app.post('/imageurl', (req, res) => { handleApiCall(req, res) })
+app.post('/imageurl', (req, res) => { image.handleApiCall(req, res) })
 
 app.listen(process.env.PORT || 3000, () => {
   console.log(`app is running on post ${process.env.PORT}`);
