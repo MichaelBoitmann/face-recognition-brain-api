@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv').config();
 
 const express = require('express');
 // Latest version of ExpressJS that comes with Body-Parser!
@@ -13,7 +13,7 @@ const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 
-config();
+// config();
 
 // Connecting to Postgres database using PGAdmin4
 const db = knex({
