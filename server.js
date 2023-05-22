@@ -8,10 +8,10 @@ const cors = require('cors');
 const knex = require('knex');
 const { config } = require('dotenv');
 
-const register = require('../controllers/register');
-const signin = require('../controllers/signin');
-const profile = require('../controllers/profile');
-const image = require('../controllers/image');
+const register = require('./controllers/register');
+const signin = require('./controllers/signin');
+const profile = require('./controllers/profile');
+const image = require('./controllers/image');
 
 // config();
 
@@ -29,6 +29,7 @@ const db = knex({
     database : process.env.DATABASE_DB
   }
 });
+
 
 // Local host connection
 // const db = knex({

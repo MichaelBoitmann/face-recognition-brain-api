@@ -5,9 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build": "npm run build",
     "start:dev": "nodemon server.js"
   },
+  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MichaelBoitmann/face-recognition-brain-api.git"
