@@ -1,16 +1,19 @@
+require('dotenv').config();
+
 const express = require('express');
 // Latest version of ExpressJS that comes with Body-Parser!
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const knex = require('knex');
+const { config } = require('dotenv');
 
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0
+config();
 
 // Connecting to Postgres database using PGAdmin4
 const db = knex({
@@ -18,7 +21,7 @@ const db = knex({
   client: 'pg',
   connection: {
     connectionString : process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: true },
+    // ssl: { rejectUnauthorized: true },
     host : process.env.DATABASE_HOST,
     port : 5432,
     user : process.env.DATABASE_USER,
@@ -91,8 +94,8 @@ app.use(express.json());
 app.get('/', (req, res) => { res.send(db.users) })
 
 // Sign in for registered user
-// app.post('/signin', (req, res) => { signin.handleSignin(req, res, db, bcrypt) })
-app.post('/signin', signin.handleSignin(req, res, db, bcrypt))
+app.post('/signin', (req, res) => { signin.handleSignin(req, res, db, bcrypt) })
+// app.post('/signin', signin.handleSignin(req, res, db, bcrypt))
 
 // Register for new user
 app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
