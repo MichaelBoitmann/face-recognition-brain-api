@@ -4,22 +4,23 @@ const handleRegister = (req, res, db, bcrypt) => {
     return res.status(400).json('incorrect credentials');
   }
   const hash = bcrypt.hashSync(password);
-    db.transaction(trx => {
-      trx.insert({
-        hash: hash,
-        email: email
+    db.transaction((trx) => {
+      trx
+        .insert({
+          hash: hash,
+          email: email
       })
       .into('login')
       .returning('email')
-      .then(loginEmail => {
+      .then((loginEmail) => {
         return trx('users')
           .returning('*')
           .insert({
             email: loginEmail[0].email, // Knex.js version 1.0.0 or higher
             name: name,
-            joined: new Date() 
+            joined: new Date(),
           })
-          .then(user => {
+          .then((user) => {
             res.json(user[0])
           })
       })
@@ -30,5 +31,5 @@ const handleRegister = (req, res, db, bcrypt) => {
   }
 
   module.exports = {
-    handleRegister: handleRegister
+    handleRegister: handleRegister,
   }
